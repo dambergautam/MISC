@@ -80,7 +80,7 @@ RewriteCond %{HTTP_HOST} ^www.example.com$ [NC]
 RewriteRule ^(.*)$ http://example.com/$1 [L,R=301,NC]
 ```
 
-### Forcing https
+## Forcing https
 ```
 RewriteEngine on
 RewriteCond %{HTTPS} !on
@@ -112,7 +112,14 @@ RewriteRule ^ %1 [R=301,L]
 
 ## Prevent viewing of .htaccess file
 ```
+# Example 1
 <Files .htaccess>
+order allow,deny
+deny from all
+</Files>
+
+# Example 2
+<Files config.php>
 order allow,deny
 deny from all
 </Files>
@@ -139,7 +146,7 @@ RewriteRule ^(.*)$ -
 
 # Rule 2
 # Rewrite rule for example2.com domain
-RewriteCond %{HTTP_HOST} ^(www\.)?example2\.com$ [OR]
+RewriteCond %{HTTP_HOST} ^(www\.)?example2\.com$ [NC,OR]
 RewriteCond %{HTTP_HOST} ^(www\.)?example2\.net$ [NC]
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
@@ -171,6 +178,21 @@ If following rule set matched
 
 then go to `example2.com/category2/*` otherwise do nothing.
 
+## Allow Cross-Domain Fonts
+
+You need to add the Access-Control-Allow-Origin header to your font files to
+solve CORS problem in Firefox and other browsers.
+
+It will require to enable `mod_headers` module in your Apache Configuration.
+
+```
+<IfModule mod_headers.c>
+    <FilesMatch "\.(ttf|ttc|otf|eot|woff|woff2)$">
+        Header set Access-Control-Allow-Origin "*"
+    </FilesMatch>
+</IfModule>
+```
+
 ## Useful regex characters
 **Flags**
 
@@ -186,8 +208,10 @@ then go to `example2.com/category2/*` otherwise do nothing.
 - `$` : End of regex string
 - `?` : Zero or more of preceding character (`^(www)?example.com`)
 - `.` : Any single character
-- `.*` : Match everything or nothing (`^domain.*` => `domain.com, domain, domain.com.net`) 
-- `-` :  Do not apply rewrite rule `RewriteRule (.*) - [L]`
+- `.*` : Match everything or nothing (`^domain.*` => `domain.com, domain, domain.com.net`)
+- `-` :  Do not apply rewrite rule (`RewriteRule (.*) - [L]`)
+- `\` : Escape special characters like (`google\.com`)
+- `!` : Declare negation (`!^example\.com$`)
 - `-d` : Check if the string is an existing directory
 - `-f` : Check if the string is an existing file
 
