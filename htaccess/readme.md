@@ -171,6 +171,34 @@ If following rule set matched
 
 then go to `example2.com/category2/*` otherwise do nothing.
 
+## Useful regex characters
+**Flags**
+
+- `[F]`   : Return a 403 forbidden http status code
+- `[L]`   : 'Last rule' which means stop processing rules
+- `[R]`   : Redirect to new URL using optional http code (301, 302 etc)
+- `[NC]`  : Case-insensitive match
+- `[QSA]` : Append query string
+- `[OR]`  : Combined next rule with `OR` operator (Default is `AND`)
+
+**Other**
+- `^` : Start of regex string (`RedirectMatch 301 ^domain/(.*)$ /$1`)
+- `$` : End of regex string
+- `?` : Zero or more of preceding character (`^(www)?example.com`)
+- `.` : Any single character
+- `.*` : Match everything or nothing (`^domain.*` => `domain.com, domain, domain.com.net`) 
+- `-` :  Do not apply rewrite rule `RewriteRule (.*) - [L]`
+- `-d` : Check if the string is an existing directory
+- `-f` : Check if the string is an existing file
+
+
+## HTTP Header Codes
+- 301 : Moved permanently
+- 302 : Moved temporary
+- 403 : Forbidden
+- 404 : File not found
+- 500 : Internal Server Error
+
 ## Learn More
 .htaccess cheatsheet [url](https://www.cheatography.com/davechild/cheat-sheets/mod-rewrite/)
 or view as [pdf file](mod-rewrite-cheatsheet.pdf)
