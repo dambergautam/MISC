@@ -119,22 +119,28 @@ deny from all
 ```
 
 ## Advance .htaccess example
+
+Below example demonstrate two different set of rules for two different domains.
+
 ```
 RewriteEngine on
 
 # Prevent directory listings
 Options All -Indexes
 
+# Rule 1
 # Rewrite rule for example1.com domain
-RewriteCond %{HTTP_HOST} !^.+\example1.com$
+RewriteCond %{HTTP_HOST} ^(www\.)?example1\.com$ [NC]
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{DOCUMENT_ROOT}/category1/$1.html -f
 RewriteRule ^(.*)$  /category1/$1.html [L,R=301]
 RewriteRule ^(.*)$ -
 
+# Rule 2
 # Rewrite rule for example2.com domain
-RewriteCond %{HTTP_HOST} !^.+\example2.com$
+RewriteCond %{HTTP_HOST} ^(www\.)?example2\.com$ [OR]
+RewriteCond %{HTTP_HOST} ^(www\.)?example2\.net$ [NC]
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{DOCUMENT_ROOT}/category2/$1.html -f
@@ -142,9 +148,29 @@ RewriteRule ^(.*)$  /category2/$1.html [L,R=301]
 RewriteRule ^(.*)$ - [L]
 
 # 404 Error page
-ErrorDocument 404 /39/404.php
+ErrorDocument 404 /404.php
 ```
+
+**Explanation Rule 1**
+
+If following rule set matched  
+- domain name regardless of `www`
+- and requested file is not directory
+- and requested file is not valid file
+- and requested file exists inside `root_dir/category1` directory
+
+then go to `example1.com/category1/*` otherwise do nothing.
+
+**Explanation Rule 2**
+
+If following rule set matched  
+- domain name is example2.com OR example2.net regardless of `www`
+- and requested file is not directory
+- and requested file is not valid file
+- and requested file exists inside `root_dir/category2` directory
+
+then go to `example2.com/category2/*` otherwise do nothing.
 
 ## Learn More
 .htaccess cheatsheet [url](https://www.cheatography.com/davechild/cheat-sheets/mod-rewrite/)
-or view [pdf](mod-rewrite-cheatsheet.pdf) file
+or view as [pdf file](mod-rewrite-cheatsheet.pdf)
