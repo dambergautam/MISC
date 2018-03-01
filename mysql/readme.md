@@ -56,3 +56,17 @@ DELETE CASCADE defined, these should be killed, too
 If child rows exists, you can't delete its parent row. So, it prevent user from
 deleting parent row that have one or more child in child table.
 ```
+
+**NO ACTION**
+
+```
+Its quivalent to RESTRICT. The MySQL Server rejects the delete or update operation
+for the parent table if there is a related foreign key value in the referenced table.
+```
+
+**SET NULL**
+
+```
+When user delete or update the row from the parent table, the foreign key column
+value in the child table becomes NULL.
+```
