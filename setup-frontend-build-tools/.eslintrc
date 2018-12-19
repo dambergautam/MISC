@@ -1,0 +1,14 @@
+{
+	"extends": "airbnb",
+	"rules": {
+		"indent": ["error", 4]
+	},
+	"globals": {
+		"document": false,
+		"Event": false,
+		"window": false,
+		"jQuery": false,
+        "vue": false,
+        "Vue": false,
+	},
+}
